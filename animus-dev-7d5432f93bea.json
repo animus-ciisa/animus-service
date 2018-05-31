@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "animus-dev-205301",
+  "private_key_id": "7d5432f93beafeff2235a4dbc7068f5ea756a5b4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCeAlqAL3eUAqk3\n49+HeyRf612GyW9wOXhf7macJ4Pyr8m/HrVLzZSNZkJEAVin76+PCY3VqkKLXh5s\nplWTWN2gastwcGAXGIQvx0zYv4upts/N3yZqTUnGs4BftyuFV2pq4y08W34RjITJ\n+Hzo6s2H1FN3/c+NvQTYMos39woEbfpdPzcqfSdNiTRQyDUHHJ6ZeEiz0wsN1Kvj\n+6x9u1YmjCVw8vKFRBJFxVXYmFy1k17Fdj1as8YVKearjmxtAje5lCYtEurxd6po\noLYiJHVnwocLqthcDLao4pJDyCzWPInwbP5JVi882oTzpyejDfuVpEjSic8dGowi\nyMqYMAg/AgMBAAECggEAAMccn/Gksv8sCN9iNlGvr4fOvh5ZmsqYqf13ATfXeUKC\nGR/eGeErRhkGdvBhp3P+SZTVj8KnRmXR7hUZgBJRFbN6cGzh9z1YXgLUSTRMCIyo\nsZ5j1gq3uG9ii3csnrnS2ybTiclfHdaVd0dMufeWkA3ppUsOM29r+Y59H+PEc1DN\nSD6Zih85rwkABh3GGjgxWyDfEsDJ/qkgaXR6PXvcNV23pP9jkZOwiT8iSfCW/88E\nFyeh6j4mAchoMQinLJDGJ9rYhja4Cpd3qsgMFRJzeI3M+FV6NCT2++Z/NOSwMOez\n3RyJGeRC4l6g4zw4F+XnVxNyMpOdPJqtRpScj9lr8QKBgQDfBjbunW2b42B48jYx\n3E+6cWzOtbwWQTYWB/0KLwXbgzGK5oTpr3n3RMLsYmacznz6CgpX+Yhcyio0jItA\nwHS5ptSENxVwg2hkC8A7JVTiJpno6W3GC5O1m6rKj8v6htYR84TeF5d9RF7q39Td\nu7pT48YChydEthW5T+GCva0i8wKBgQC1XznNIcCLK+a/K/91kpFbBG/jemCJo/Xi\nDb+Jhy6CHIIG4eLeF5iF90rgNXcTHq3erUQd+euQdbkd56/fo2ZINtcxeYTIXNO1\nLBXdy7dNFHn+PTFe9dPn8CZM/nGx24izwwQRrkPMbsWsQ51eztjwWCWdVKfYzOsR\no5krwkeghQKBgGL3hQTaAzu76KGDCh2SICciEiCgcLiHc5LPNLCCMV05mJCEvtJc\nNglOEBmJiPNohfkG35QufR5/776l511yidmgeIm7T94/0eEjfchBRqucaYv7meTa\nWk+qpl2A9glUMEaDA6DyYx0Ja/1aGkHS/lofp0yT4Q8Spg03r2Cu/teVAoGBAJ5L\n+VfHAJS3AVKS5QhJnuGwcrM4iO84kg707tnqiTX4CahWGDq8n1s1JT2gjEe8vAWg\nddYv3WAczy+Bmid3JnsamiDNLY3uLrxuOLt25Im6uGqkH+YAai2BlPwYC0UvFRXH\nvFJuJTBU8ePSs5Qetoq2dEXnsALxfqzLe5EMpJU9AoGAdQRpNcgToKjbUZpQ73kC\nf2vj+DXG2+O3L20Zjs65rG5v0TKv2wf7dXv8pMfZH7Ur6b0fFqDCGkaA8IvaNsTC\nwk/Ajc4kUgvptm0TWOdgO5l++6L8r6gku/E1Be2flB8DUb647ctHiVWdqD35wuGw\nIsczY/VwPpApFXcjuRyh/V0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "animus-dev-sql-client@animus-dev-205301.iam.gserviceaccount.com",
+  "client_id": "114835268872459727418",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/animus-dev-sql-client%40animus-dev-205301.iam.gserviceaccount.com"
+}
