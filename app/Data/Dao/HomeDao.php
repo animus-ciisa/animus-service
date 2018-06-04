@@ -50,11 +50,26 @@ class HomeDao
     
     public static function getByEmail($mail)
     {
-        $mailHome = HomeEntity::where('email_hogar', '=',$mail)->first();
+        $mailHome = HomeEntity::where('email_hogar', '=', $mail)->first();
 		if($mailHome){
 			return $mailHome;
+		} 
+		return null;
+	}
+	
+	public static function getByLogin($mail,$password)
+	{
+		$loginHome = HomeEntity::where([
+			['email_hogar', '=', $mail],
+			['password', '=', $password]
+		])->first();
+
+		if($loginHome)
+		{
+			return $loginHome;
 		}
 		return null;
-    }
+
+	}
 
 }
