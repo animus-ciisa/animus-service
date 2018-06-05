@@ -59,11 +59,8 @@ class HomeDao
 	
 	public static function getByLogin($mail,$password)
 	{
-		$loginHome = HomeEntity::where([
-			['email_hogar', '=', $mail],
-			['password', '=', $password]
-		])->first();
-
+		$loginHome = HomeEntity::where('email_hogar', $mail)->where('password',$password)->get();	
+				
 		if($loginHome)
 		{
 			return $loginHome;

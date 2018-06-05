@@ -79,21 +79,5 @@ class HomeController extends Controller
         }   
         return response()->json($data, $data->code);
     }
-
-    public function validateLogin(Request $request)
-    {
-        $data = ControllerResponses::badRequestResp();
-        $validate = \Validator::make($request->all(),[
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-        if($validate->fails()){
-            $data = ControllerResponses::unprocesableResp($validate->errors());
-        }else
-        {
-            $login = HomeDao::getByLogin($request->input('email'), $request->input('password'));
-        }
-
-    }
+  
 }

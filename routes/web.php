@@ -15,9 +15,12 @@ Route::get('/',function(){
 });    
 Route::resource('/api/home','HomeController');
 Route::group(['prefix' => '/api/home'], function() {
-    Route::post('validate-password','HomeController@validateMail');    
+    Route::post('validate-password','HomeController@validateMail');
+    Route::post('insert','HomeController@store');
 });
 
 Route::group(['prefix' => '/api/auth'], function() {
     Route::post('renew','AuthController@renew')->middleware('jwt.auth');
+    Route::post('/','AuthController@authenticate');
 });
+
