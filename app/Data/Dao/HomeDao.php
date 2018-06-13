@@ -69,4 +69,23 @@ class HomeDao
 
 	}
 
+	public static function changePassword($id,$password)
+	{
+		$home = null;
+		if($id != null and $password != null)
+		{
+			//$home = HomeEntity::find($id)->first();	
+			$home = HomeEntity::where('id_hogar', '=', $id)->first();		
+			if(!$home){
+				return null;
+			}
+
+			$home->password = Hash::make($password);
+			if($home->save()) {				
+				return $home;
+			}
+		}
+		
+	}
+
 }

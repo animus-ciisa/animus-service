@@ -22,5 +22,6 @@ Route::group(['prefix' => '/api/home'], function() {
 Route::group(['prefix' => '/api/auth'], function() {
     Route::post('renew','AuthController@renew')->middleware('jwt.auth');
     Route::post('/','AuthController@authenticate');
+    Route::post('recover-password','AuthController@recoverPassword');
 });
 
