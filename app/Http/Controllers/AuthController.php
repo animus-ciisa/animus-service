@@ -85,29 +85,23 @@ class AuthController extends Controller
                         $toEmail = $home->email_hogar;
                         $toName = $home->nick_hogar;
                         
-
-                       // Mail::send('Mail.changePassword',["password" => $randomString], function ($message) use($fromEmail,$fromName,$toEmail,$toName) {
-                       //     $message->from($fromEmail, $fromName);
-                       //     $message->sender($fromEmail, $fromName);
-                       //     $message->to($toEmail, $toName);   
-                              // $message->cc($fromEmail, $fromName);                               
-                              // $message->subject('Nueva contraseña - ANIMUS');
-                       // $message->priority(3);
-                            //$message->attach('pathToFile');
-                        //}); 
-                        $mensaje= "Nueva Password";
+                        Mail::send('Mail.changePassword',["password" => $randomString], function ($message) use($fromEmail,$fromName,$toEmail,$toName) {
+                            $message->from($fromEmail, $fromName);
+                            $message->sender($fromEmail, $fromName);
+                            $message->to($toEmail, $toName);   
+                            $message->subject('Nueva contraseña - ANIMUS');
+                        }); 
+                        /*$mensaje= "Nueva Password";
                         $cabeceras = 'From: webmaster@gmail.com' . "\r\n" .
                                      'Reply-To: animushabit@gmail.com' . "\r\n" .
                                      'X-Mailer: PHP/' . phpversion();
+                        mail('eroman@aj.cl','Nueva Password',$mensaje,$cabeceras);*/
 
-
-                        mail('eroman@aj.cl','Nueva Password',$mensaje,$cabeceras);
-
-                        $data = ControllerResponses::okResp(['exists'=> 'true']);
+                        $data = ControllerResponses::okResp(['status'=> 'true']);
                     }
                     
                 }else{
-                    $data = ControllerResponses::okResp(['exists'=> 'false']);
+                    $data = ControllerResponses::okResp(['status'=> 'false']);
                 }
                 
             } 
