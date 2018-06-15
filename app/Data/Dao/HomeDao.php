@@ -56,18 +56,6 @@ class HomeDao
 		} 
 		return null;
 	}
-	
-	public static function getByLogin($mail,$password)
-	{
-		$loginHome = HomeEntity::where('email_hogar', $mail)->where('password',$password)->get();	
-				
-		if($loginHome)
-		{
-			return $loginHome;
-		}
-		return null;
-
-	}
 
 	public static function changePassword($id,$password)
 	{

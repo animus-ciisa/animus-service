@@ -33,20 +33,25 @@ class HomeController extends Controller
         if($validate->fails()){
             $data = ControllerResponses::unprocesableResp($validate->errors());
         }else{
-            $home = HomeDao::save($request->input('nick'), $request->input('email'), $request->input('password'), null);
-            if($home != null){
-                $data = ControllerResponses::createdResp($home);
-                try {
-                    $credentials = ['email_hogar' => $request->input('email'), 'password' => $request->input('password')];
-                    if ($token = JWTAuth::attempt($credentials)) {
-                        $home['session'] = ['token' => $token ];
-                        $data = ControllerResponses::createdResp($home);
+            $exists = HomeDao::getByEmail($request->input('email'));
+            if(!$exists){
+                $home = HomeDao::save($request->input('nick'), $request->input('email'), $request->input('password'), null);
+                if($home != null){
+                    $data = ControllerResponses::createdResp($home);
+                    try {
+                        $credentials = ['email_hogar' => $request->input('email'), 'password' => $request->input('password')];
+                        if ($token = JWTAuth::attempt($credentials)) {
+                            $home['session'] = ['token' => $token ];
+                            $data = ControllerResponses::createdResp($home);
+                        }
+                    } catch (JWTException $e) {
+                        $data = ControllerResponses::unprocesableResp('No se pudo crear el token');
                     }
-                } catch (JWTException $e) {
-                    $data = ControllerResponses::unprocesableResp('No se pudo crear el token');
+                }else{
+                    $data = ControllerResponses::unprocesableResp('Error al intentar crear el hogar');
                 }
             }else{
-                $data = ControllerResponses::unprocesableResp('Error al intentar crear el hogar');
+                $data = ControllerResponses::unprocesableResp('El correo ingresado ya existe');
             }
         }
         return response()->json($data, $data->code);

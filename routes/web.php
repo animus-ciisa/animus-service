@@ -25,3 +25,8 @@ Route::group(['prefix' => '/api/auth'], function() {
     Route::post('recover-password','AuthController@recoverPassword');
 });
 
+
+Route::resource('/api/camera','CameraController');
+Route::group(['prefix' => '/api/camera'], function() {
+});
+
