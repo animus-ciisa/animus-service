@@ -30,7 +30,7 @@ class CameraController extends Controller
                 }
                 if($notSaved > 0){
                     for($i = 0; $i < count($savedArray); $i++){
-
+                        CameraDao::delete($savedArray[$i]->id);
                     }
                     $response = ControllerResponses::unprocesableResp('Uno o varios elementos no son válidos');
                 }else{
