@@ -30,3 +30,7 @@ Route::resource('/api/camera','CameraController');
 Route::group(['prefix' => '/api/camera'], function() {
 });
 
+Route::resource('/api/habitant','HabitantController');
+Route::group(['prefix' => '/api/habitant'], function() {
+});
+
