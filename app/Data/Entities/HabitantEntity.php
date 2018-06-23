@@ -37,7 +37,7 @@ class HabitantEntity extends Model
         'fecha_hora_modificacion_persona'
     ];
 
-    protected $appends = ['id','idHogar','idTipo', 'nombre', 'apellido','nacimiento', 'created', 'modified'];
+    protected $appends = ['id','idHogar','idTipo', 'name', 'lastname','brithday', 'created', 'modified'];
 
     public function getIdAttribute()
     {
@@ -54,17 +54,17 @@ class HabitantEntity extends Model
         return $this->attributes['id_tipo_persona'];
     }
 
-    public function getNombreAttribute()
+    public function getNameAttribute()
     {
         return $this->attributes['nombre_persona'];
     }
 
-    public function getApellidoAttribute()
+    public function getLastnameAttribute()
     {
         return $this->attributes['apellido_persona'];
     }
 
-    public function getNacimientoAttribute()
+    public function getBrithdayAttribute()
     {
         return $this->attributes['nacimiento_persona'];
     }
