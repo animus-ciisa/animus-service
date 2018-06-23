@@ -6,7 +6,7 @@ use App\Data\Entities\HabitantEntity;
 
 class HabitantDao
 {
-    public function byId($id)
+    public static function byId($id)
     {
         $habitant = HabitantEntity::where('id_habintante', $id)->first();
         if($habitant){
