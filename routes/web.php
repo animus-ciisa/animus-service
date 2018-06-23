@@ -34,3 +34,7 @@ Route::resource('/api/habitant','HabitantController');
 Route::group(['prefix' => '/api/habitant'], function() {
 });
 
+Route::resource('/api/user','UserController');
+Route::group(['prefix' => '/api/user'], function() {
+});
+

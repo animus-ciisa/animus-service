@@ -10,9 +10,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Facades\Auth;
 use Hash;
 
-class HabitantEntity extends Model implements AuthenticatableContract, CanResetPasswordContract
+class HabitantEntity extends Model
 {
-    use Authenticatable, CanResetPassword;
     protected $table = 'persona';
     protected $primaryKey='id_persona';
 
