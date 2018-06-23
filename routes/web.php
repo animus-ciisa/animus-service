@@ -36,5 +36,7 @@ Route::group(['prefix' => '/api/habitant'], function() {
 
 Route::resource('/api/user','UserController');
 Route::group(['prefix' => '/api/user'], function() {
+    Route::post('auth','UserController@authenticate');
+    Route::post('auth/renew','UserController@renew');
 });
 
