@@ -26,22 +26,25 @@ class HabitantController extends Controller
     public function store(Request $request)
     {
         $data = ControllerResponses::badRequestResp();
-        if ($authHome = JWTAuth::parseToken()->authenticate()) { 
+        if ($authHome = JWTAuth::parseToken()->authenticate()) {
+
             $validate = \Validator::make($request->all(),[
                 'type' => 'required',
                 'name' => 'required',
                 'lastname' => 'required',
-                'brithday' => 'required',
+                'birthday' => 'required',
             ]);
 
             if($validate->fails()){
                 $data = ControllerResponses::unprocesableResp($validate->errors());
             }else
             {
-                
-                $habitant = HabitantDao::save($authHome->id,$request->input('type'),$request->input('name'), $request->input('lastname'), $request->input('brithday'), null);
-                //$data = ControllerResponses::createdResp($habitant);
-                $data = ControllerResponses::okResp(['Id'=> $habitant->id]);
+                $habitant = HabitantDao::save($authHome->id,
+                    $request->input('type'), $request->input('name'),
+                    $request->input('lastname'), $request->input('birthday'));
+                if($habitant != null){
+                    $data = ControllerResponses::createdResp(['id'=> $habitant->id]);
+                }
             }
         }
         return response()->json($data, $data->code);

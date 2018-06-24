@@ -15,7 +15,7 @@ class HabitantDao
         return null;
     }
 
-    public static function save($homeId,$tipoId, $name, $lastname, $brithday, $id = null)
+    public static function save($homeId, $tipoId, $name, $lastname, $brithday, $id = null)
     {
         $habitant = null;
 		if($id != null){
