@@ -27,8 +27,14 @@ class UserController extends Controller
             }else{
                 $password = GeneratorUtil::aleatoryPassword();
                 $user = UserDao::save($habitant->id, $request->input('imei'), $request->input('device'), $password);
-                if($user)
-                    $response = ControllerResponses::createdResp(['serial' => $password]);
+                if($user){
+                    $credentials = ['imei_usuario' => $request->input('imei'), 'password' => $password];
+                    $token = JWTAuth::attempt($credentials);
+                    $user->load('habitant');
+                    $user['access'] = ['serial' => $password];
+                    $user['session'] = ['token'=> $token];
+                    $response = ControllerResponses::createdResp($user);
+                }
                 else
                     $response = ControllerResponses::internalServerErrorResp();
             }

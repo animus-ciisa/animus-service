@@ -39,6 +39,11 @@ class UserEntity extends Model implements AuthenticatableContract, CanResetPassw
 
     protected $appends = ['id', 'idHabitant', 'imei', 'device', 'created', 'modified'];
 
+    public function habitant()
+    {
+        return $this->hasOne('App\Data\Entities\HabitantEntity', 'id_persona', 'id_persona');
+    }
+
     public function getIdAttribute()
     {
         return $this->attributes['id_usuario'];
