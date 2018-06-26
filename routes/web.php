@@ -25,7 +25,6 @@ Route::group(['prefix' => '/api/auth'], function() {
     Route::post('recover-password','AuthController@recoverPassword');
 });
 
-
 Route::resource('/api/camera','CameraController');
 Route::group(['prefix' => '/api/camera'], function() {
 });
@@ -34,6 +33,7 @@ Route::resource('/api/habitant','HabitantController');
 Route::group(['prefix' => '/api/habitant'], function() {
     Route::post('{idHabitant}/images','HabitantController@storeImage');
     Route::put('{idHabitant}','HabitantController@update');
+    Route::put('{idHabitant}/images/{idImage}','HabitantController@updateImage');
 });
 
 Route::resource('/api/user','UserController');

@@ -8,7 +8,7 @@ class ImageDao
 {
     public function byId($id)
     {
-        $mage = ImageEntity::where('id_imagen', $id)->first();
+        $image = ImageEntity::where('id_imagen', $id)->get()->first();
         if($image){
             return $image;
         }
@@ -19,7 +19,7 @@ class ImageDao
     {
         $image = null;
 		if($id != null){
-			$image = ImageEntity::find($id)->first();
+            $image = ImageEntity::where('id_imagen', $id)->get()->first();
 			if(!$image){
 				return null;
 			}
