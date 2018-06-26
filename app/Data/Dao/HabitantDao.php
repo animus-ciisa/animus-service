@@ -15,9 +15,10 @@ class HabitantDao
         return null;
     }
 
-    public static function save($homeId,$tipoId, $name, $lastname, $brithday, $id = null)
+    public static function save($homeId, $tipoId , $name, $lastname, $brithday, $id = null)
     {
         $habitant = null;
+        
 		if($id != null){
 			$habitant = HabitantEntity::find($id)->first();
 			if(!$habitant){
@@ -35,6 +36,6 @@ class HabitantDao
             return $habitant;
         }
         return null;
-    }
+    }    
 
 }
