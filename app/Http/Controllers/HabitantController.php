@@ -51,7 +51,7 @@ class HabitantController extends Controller
         return response()->json($data, $data->code);
     }
 
-    public function update($id,Request $request)
+    public function update($id, Request $request)
     {
         $data = ControllerResponses::badRequestResp();
         if ($authHome = JWTAuth::parseToken()->authenticate()) { 
@@ -64,24 +64,35 @@ class HabitantController extends Controller
 
             if($validate->fails()){
                 $data = ControllerResponses::unprocesableResp($validate->errors());
-            }else
-            {
-                $habitant = HabitantDao::save($authHome->id,$request->input('type'),$request->input('name'),
+            }else {
+                $habitant = HabitantDao::save($authHome->id, $request->input('type'), $request->input('name'),
                     $request->input('lastname'), $request->input('birthday'), $id);
-                if($habitant != null)
-                {
-                   $data = ControllerResponses::okResp(['status'=> 'true']);
+                if($habitant != null){
+                    $data = ControllerResponses::createdResp(['id'=> $habitant->id]);
                 }
             }
         }
         return response()->json($data, $data->code);
     }
 
+    
+    public function destroy($id, Request  $request)
+    {
+        $data = ControllerResponses::badRequestResp();
+        if ($authHome = JWTAuth::parseToken()->authenticate()) 
+        { 
+            $delete = HabitantDao::delete($id);
+            $data = ControllerResponses::okResp(['status'=> $delete]);
+        }        
+        return response()->json($data, $data->code);
+    }
+
+
 
     public function storeImage($idHabitant, Request $request)
     {
         $data = ControllerResponses::badRequestResp();
-        if ($authHome = JWTAuth::parseToken()->authenticate()) 
+        if ($authHome = JWTAuth::parseToken()->authenticate())
         {
             if($this->validateImageRequest($request->all()))
             {
