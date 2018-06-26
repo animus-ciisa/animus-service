@@ -43,7 +43,6 @@ class HabitantController extends Controller
             {
                 
                 $habitant = HabitantDao::save($authHome->id,$request->input('type'),$request->input('name'), $request->input('lastname'), $request->input('birthday'), null);
-                //$data = ControllerResponses::createdResp($habitant);
                 $data = ControllerResponses::okResp(['Id'=> $habitant->id]);
             }
         }
@@ -67,7 +66,7 @@ class HabitantController extends Controller
             {
                 
                 $habitant = HabitantDao::save($authHome->id,$request->input('type'),$request->input('name'), $request->input('lastname'), $request->input('birthday'), $id);
-                //$data = ControllerResponses::createdResp($habitant);
+               
                 if($habitant != null)
                 {
                    $data = ControllerResponses::okResp(['status'=> 'true']);
@@ -78,13 +77,25 @@ class HabitantController extends Controller
         return response()->json($data, $data->code);
     }
 
+    
+    public function destroy($id, Request  $request)
+    {
+        if ($authHome = JWTAuth::parseToken()->authenticate()) 
+        { 
+            $habitant = HabitantDao::delete($id);
+
+            $data = ControllerResponses::okResp(['status'=> 'true']);
+        }        
+        return response()->json($data, $data->code);
+    }
+
+
 
     public function storeImage($idHabitant, Request $request)
     {
         if ($authHome = JWTAuth::parseToken()->authenticate()) 
         { 
-            $validate = \Validator::make($request->all(),[
-                'idPersona' => 'required',                
+            $validate = \Validator::make($request->all(),[                
                 'image' => 'required',
                 'yRectangle' => 'required',
                 'xRectangle' => 'required',
@@ -98,21 +109,17 @@ class HabitantController extends Controller
                 $data = ControllerResponses::unprocesableResp($validate->errors());
             }else
             {
-                //obtenemos el path de la imagen
+             
                 if($request->file('image'))
                 {
-
-                    // $file = $request->file('image');
-                    // $nameImagen = time() . '-' . $file->getClientOriginalName();                                
-                    // $file->move(public_path() . '/images/', $nameImagen);
-                    // $path = asset(public_path().'/images/'.$nameImagen);
+                  
                     $path = Storage::disk('public')->put('images',$request->file('image'));
                     $pathf = asset($path);
                     $nameImagen = $request->file('image')->getClientOriginalName();
                 }
 
 
-                $image = ImageDao::save($request->input('idPersona'),$path, $nameImagen, $request->input('yRectangle'),$request->input('xRectangle'),$request->input('hRectangle'),$request->input('wRectangle'),$request->input('type') ,null);
+                $image = ImageDao::save($idHabitant,$path, $nameImagen, $request->input('yRectangle'),$request->input('xRectangle'),$request->input('hRectangle'),$request->input('wRectangle'),$request->input('type') ,null);
                 $data = ControllerResponses::okResp(['id'=> $image->id,'path' => $pathf]);
             }
         }

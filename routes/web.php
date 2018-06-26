@@ -33,12 +33,13 @@ Route::group(['prefix' => '/api/camera'], function() {
 Route::resource('/api/habitant','HabitantController');
 Route::group(['prefix' => '/api/habitant'], function() {
     Route::post('{idHabitant}/images','HabitantController@storeImage');
-    Route::put('{idHabitant}','HabitantController@update');
+    Route::put('{idHabitant}','HabitantController@update');    
+    //Route::delete('{idHabitant}','HabitantController@destroy');    
 });
 
 Route::resource('/api/user','UserController');
 Route::group(['prefix' => '/api/user'], function() {
     Route::post('auth','UserController@authenticate');
-    Route::post('auth/renew','UserController@renew');
+    Route::post('auth/renew','UserController@renew');    
 });
 
