@@ -6,16 +6,20 @@ use App\Data\Entities\HabitantEntity;
 
 class HabitantDao
 {
-    public function byId($id)
+    public static function byId($id)
     {
-        $habitant = HabitantEntity::where('id_habintante', $id)->first();
+        $habitant = HabitantEntity::where('id_persona', $id)->first();
         if($habitant){
             return $habitant;
         }
         return null;
     }
 
+<<<<<<< HEAD
     public static function save($homeId, $tipoId , $name, $lastname, $birthday, $id = null)
+=======
+    public static function save($homeId, $tipoId, $name, $lastname, $brithday, $id = null)
+>>>>>>> origin/master
     {
         $habitant = null;
         
