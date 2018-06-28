@@ -40,18 +40,15 @@ class HabitantController extends Controller
                 $data = ControllerResponses::unprocesableResp($validate->errors());
             }else
             {
-<<<<<<< HEAD
                 
                 $habitant = HabitantDao::save($authHome->id,$request->input('type'),$request->input('name'), $request->input('lastname'), $request->input('birthday'), null);
                 $data = ControllerResponses::okResp(['Id'=> $habitant->id]);
-=======
                 $habitant = HabitantDao::save($authHome->id,
                     $request->input('type'), $request->input('name'),
                     $request->input('lastname'), $request->input('birthday'));
                 if($habitant != null){
                     $data = ControllerResponses::createdResp(['id'=> $habitant->id]);
                 }
->>>>>>> origin/master
             }
         }
         return response()->json($data, $data->code);
@@ -141,8 +138,9 @@ class HabitantController extends Controller
             }
         }
         return response()->json($data, $data->code);
+        }
+      }
     }
-
     public function updateImage(Request $request, $idHabitant, $idImage)
     {
         $data = ControllerResponses::badRequestResp();
