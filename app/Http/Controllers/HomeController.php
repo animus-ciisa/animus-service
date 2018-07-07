@@ -26,7 +26,7 @@ class HomeController extends Controller
     {
         $data = ControllerResponses::badRequestResp();
         $validate = \Validator::make($request->all(),[
-            'nick' => 'required|min:5',
+            'nick' => 'required',
             'email' => 'required',
             'password' => 'required',
         ]);

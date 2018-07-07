@@ -44,3 +44,7 @@ Route::group(['prefix' => '/api/user'], function() {
     Route::post('auth/renew','UserController@renew');    
 });
 
+Route::resource('/api/alarms/in-time-range','AlarmInTimeRangeController');
+Route::group(['prefix' => '/api/alarms'], function() {
+    Route::put('{idAlarma}','AlarmInTimeRangeController@update');
+}); 
