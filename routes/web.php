@@ -31,8 +31,10 @@ Route::group(['prefix' => '/api/camera'], function() {
 
 Route::resource('/api/habitant','HabitantController');
 Route::group(['prefix' => '/api/habitant'], function() {
-    Route::put('{idHabitant}','HabitantController@update');
     Route::post('{idHabitant}/images','HabitantController@storeImage');
+    //Route::put('{idHabitant}','HabitantController@update');
+    //Route::delete('{idHabitant}','HabitantController@destroy');    
+    //Route::put('{idHabitant}','HabitantController@update');
     Route::put('{idHabitant}/images/{idImage}','HabitantController@updateImage');
 });
 
@@ -42,3 +44,7 @@ Route::group(['prefix' => '/api/user'], function() {
     Route::post('auth/renew','UserController@renew');    
 });
 
+Route::resource('/api/alarms/in-time-range','AlarmInTimeRangeController');
+Route::group(['prefix' => '/api/alarms'], function() {
+    Route::put('{idAlarma}','AlarmInTimeRangeController@update');
+}); 
