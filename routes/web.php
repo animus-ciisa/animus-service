@@ -1,4 +1,5 @@
 <?php
+use GuzzleHttp\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +42,25 @@ Route::group(['prefix' => '/api/habitant'], function() {
 Route::resource('/api/user','UserController');
 Route::group(['prefix' => '/api/user'], function() {
     Route::post('auth','UserController@authenticate');
-    Route::post('auth/renew','UserController@renew');    
+    Route::post('auth/renew','UserController@renew');
+    Route::get('notify', function(){
+        /*$client = new Client(['headers' => [
+            'Authorization' => 'key=AIzaSyD004GHyZqw75enxwCJHbhUUEHOFgaiQZw',
+            'content-type' => 'application/json'
+        ]]);
+        $res = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', [ "data" => [
+            "title" => "Hola mundo animus",
+            "message" => "Que sucede con los animus ???"
+          ],
+          "to" => "e9ilCBL70ns:APA91bFgTT3Wk8aSlTUkF4hGZTFkt1yz1a145xd-rwO8gxVm3HcgbTKVW-CBxKZOoJAyU8L3rzM04mduCAyOyH6ZinXJStZM68PQStRuOFqy7-pdEy78SbcXFoVCyd9u0Pw8gTsalSYvHjOFarKCE7vyrWmTWcR0ig"
+        ]);*/
+        return ['message' => "mensaje"];
+    });
 });
 
 Route::resource('/api/alarms/in-time-range','AlarmInTimeRangeController');
 Route::group(['prefix' => '/api/alarms'], function() {
     Route::put('{idAlarma}','AlarmInTimeRangeController@update');
 }); 
+
+
