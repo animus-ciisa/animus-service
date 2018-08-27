@@ -2,6 +2,8 @@
 
 namespace App\Data\Dao;
 use App\Data\Entities\AlarmEntity;
+use App\Data\Entities\DetectionEntity;
+use App\Data\Entities\DetectionImageEntity;
 
 
 class AlarmDao
@@ -9,7 +11,7 @@ class AlarmDao
     public static function byId($id)
     {
         $alarm = AlarmEntity::where('id_alarma', $id)->first();
-        if($habitant){
+        if($alarm){
             return $alarm;
         }
         return null;
@@ -18,7 +20,6 @@ class AlarmDao
     public static function save($homeId,$idTypeAlarm,$idPerson,$idTimeStartAlarm,$idTimeFinishAlarm,$stateMondayAlarm,$stateTuesdayAlarm,$stateWednesdayAlarm,$stateThursdayAlarm,$stateFridayAlarm,$stateSaturdayAlarm,$stateSundayAlarm,$stateAlarm, $id = null)
     {
         $alarm = null;
-        
 		if($id != null){
 			$alarm = AlarmEntity::find($id)->first();
 			if(!$alarm){
@@ -49,7 +50,6 @@ class AlarmDao
     public static function delete($id)
     {
         $alarm = null;
-        
         if($id != null)
         {
 			$alarm = AlarmEntity::find($id)->first();
@@ -58,10 +58,52 @@ class AlarmDao
             }else
             {
                 return null;
-                
             }
-        }    
-
+        }
     }
 
+    public static function saveDetection($alarm, $hasDetection, $id = null)
+    {
+        $detection = null;
+        if($id != null){
+            $detection = DetectionEntity::find($id)->get()->first();
+            if(!$detection){
+                return null;
+            }
+        }else{
+            $detection = new DetectionEntity();
+        }
+        $detection->id_alarma = $alarm;
+        $detection->hubo_deteccion = $hasDetection;
+        if($detection->save()){
+            return $detection;
+        }
+        return null;
+    }
+
+    public static function saveDetectionImage($detection, $image, $id = null)
+    {
+        $detectionImage = null;
+        if($id != null){
+            $detectionImage = DetectionImageEntity::find($id)->get()->first();
+            if(!$detectionImage){
+                return null;
+            }
+        }else{
+            $detectionImage = new DetectionImageEntity();
+        }
+        $detectionImage->id_deteccion = $detection;
+        $detectionImage->id_imagen = $image;
+        if($detectionImage->save()){
+            return $detectionImage;
+        }
+        return null;
+    }
+
+    public static function getFullDetection($detectionId)
+    {
+        return DetectionEntity::with('images.image')
+            ->with('alarm.home.habitants.user')
+            ->where('id_deteccion', $detectionId)->get()->first();
+    }
 }

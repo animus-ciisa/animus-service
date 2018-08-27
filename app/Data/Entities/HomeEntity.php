@@ -67,4 +67,9 @@ class HomeEntity extends Model implements AuthenticatableContract, CanResetPassw
     {
         return $this->attributes['fecha_hora_modificacion_hogar'];
     }
+
+    public function habitants()
+    {
+        return $this->hasMany('App\Data\Entities\HabitantEntity', 'id_hogar', 'id_hogar');
+    }
 }

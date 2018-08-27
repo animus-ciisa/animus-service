@@ -78,4 +78,9 @@ class HabitantEntity extends Model
     {
         return $this->attributes['fecha_hora_modificacion_persona'];
     }
+
+    public function user()
+    {
+        return $this->hasOne('App\Data\Entities\UserEntity', 'id_persona', 'id_persona');
+    }
 }

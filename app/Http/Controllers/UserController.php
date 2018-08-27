@@ -73,6 +73,8 @@ class UserController extends Controller
     }
 
 
+
+
     private function validateAuthenticateRequest($auth){
         $validate = \Validator::make($auth,[
             'imei' => 'required',

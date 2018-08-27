@@ -9,7 +9,6 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Facades\Auth;
 
-
 class AlarmEntity extends Model
 {
     protected $table = 'alarma';
@@ -133,5 +132,10 @@ class AlarmEntity extends Model
     public function getModifiedAttribute()
     {
         return $this->attributes['fecha_hora_modificacion_persona'];
+    }
+
+    public function home()
+    {
+        return $this->hasOne('App\Data\Entities\HomeEntity', 'id_hogar', 'id_hogar');
     }
 }
