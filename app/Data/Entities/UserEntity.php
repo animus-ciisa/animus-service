@@ -20,24 +20,24 @@ class UserEntity extends Model implements AuthenticatableContract, CanResetPassw
 
     protected $fillable =[
         'id_persona',
-        'id_tipo_usuario',
         'imei_usuario',
         'dispositivo_usuario',
-        'password'
+        'password',
+        'fcm_token'
     ];
 
     protected $hidden = [
         'id_usuario',
         'id_persona',
-        'id_tipo_usuario',
         'imei_usuario',
         'dispositivo_usuario',
         'fecha_hora_registro_usuario',
         'fecha_hora_modificacion_usuario',
-        'password'
+        'password',
+        'fcm_token'
     ];
 
-    protected $appends = ['id', 'idHabitant', 'imei', 'device', 'created', 'modified'];
+    protected $appends = ['id', 'idHabitant', 'imei', 'device', 'created', 'modified', 'fcmToken'];
 
     public function habitant()
     {
@@ -52,6 +52,11 @@ class UserEntity extends Model implements AuthenticatableContract, CanResetPassw
     public function getIdHabitantAttribute()
     {
         return $this->attributes['id_persona'];
+    }
+
+    public function getFcmTokenAttribute()
+    {
+        return $this->attributes['fcm_token'];
     }
 
     public function getImeiAttribute()

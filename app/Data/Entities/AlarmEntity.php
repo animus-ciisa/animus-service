@@ -126,12 +126,12 @@ class AlarmEntity extends Model
 
     public function getCreatedAttribute()
     {
-        return $this->attributes['fecha_hora_registro_persona'];
+        return $this->attributes['fecha_hora_registro_alarma'];
     }
 
     public function getModifiedAttribute()
     {
-        return $this->attributes['fecha_hora_modificacion_persona'];
+        return $this->attributes['fecha_hora_registro_alarma'];
     }
 
     public function home()

@@ -16,6 +16,7 @@ class DetectionEntity extends Model
     ];
 
     protected $hidden =[
+        'id_deteccion',
         'id_alarma',
         'hubo_deteccion',
         'fecha_hora_registro_deteccion',
@@ -26,7 +27,7 @@ class DetectionEntity extends Model
 
     public function getIdAttribute()
     {
-        return $this->attributes['id_alarma'];
+        return $this->attributes['id_deteccion'];
     }
 
     public function getHasAttribute()

@@ -94,16 +94,16 @@ class AlarmInTimeRangeController extends Controller
         $data = ControllerResponses::badRequestResp();
         //if ($authHome = JWTAuth::parseToken()->authenticate())
         //{
-            $detection = AlarmDao::saveDetection($request->input('idAlarm'), $request->input('hasDetection'));
+        $detection = AlarmDao::saveDetection($request->input('idAlarm'), $request->input('hasDetection'));
 
-            if($request->has('idHabitant')){
-                $image = $this->saveImage($request, $request->input('idHabitant'));
-                if($image){
-                    AlarmDao::saveDetectionImage($detection->id, $image->id);
-                }
+        if($request->has('idHabitant')){
+            $image = $this->saveImage($request, $request->input('idHabitant'));
+            if($image){
+                AlarmDao::saveDetectionImage($detection->id, $image->id);
             }
-        $this->notify($detection->id);
-        $data = ControllerResponses::createdResp(['detection' => AlarmDao::getFullDetection($detection->id)]);
+        }
+
+        $data = ControllerResponses::createdResp(['notify' => $this->notify($detection->id)]);
         //}
         return response()->json($data, $data->code);
     }
@@ -115,18 +115,32 @@ class AlarmInTimeRangeController extends Controller
 
     private function notify($detection)
     {
-        $client = new Client(['headers' => [
-            'Authorization' => 'key=AIzaSyD004GHyZqw75enxwCJHbhUUEHOFgaiQZw',
-            'content-type' => 'application/json'
-        ]]);
-        $res = $client->post('https://fcm.googleapis.com/fcm/send', ['body' => json_encode([
-            "data" => [
-                "title" => "Hola mundo animus",
-                "message" => "Que sucede con los animus ???"
-            ],
-            "to" => "e9ilCBL70ns:APA91bFgTT3Wk8aSlTUkF4hGZTFkt1yz1a145xd-rwO8gxVm3HcgbTKVW-CBxKZOoJAyU8L3rzM04mduCAyOyH6ZinXJStZM68PQStRuOFqy7-pdEy78SbcXFoVCyd9u0Pw8gTsalSYvHjOFarKCE7vyrWmTWcR0ig"
-        ])]);
-        return ['message' => json_decode($res->getBody())];
+        $registrationIds = [];
+        $detectionData = AlarmDao::getFullDetection($detection);
+        if($detectionData != null){
+            foreach ($detectionData->alarm->home->habitants as $habitant){
+                if($habitant->user != null){
+                    $registrationIds[] = $habitant->user->fcmToken;
+                }
+            }
+        }
+
+        if(count($registrationIds) > 0){
+            $client = new Client(['headers' => [
+                'Authorization' => 'key=AIzaSyD004GHyZqw75enxwCJHbhUUEHOFgaiQZw',
+                'content-type' => 'application/json'
+            ]]);
+            $res = $client->post('https://fcm.googleapis.com/fcm/send', ['body' => json_encode([
+                "data" => [
+                    "title" => "Nueva de tección de Animus",
+                    'body' => "La alarma se a detonado entera de brigida",
+                    "message" => "Que sucede con los animus ???"
+                ],
+                "registration_ids" => $registrationIds
+            ])]);
+            return json_decode($res->getBody());
+        }
+        return null;
     }
 
     private function saveImage(Request $request, $idHabitant, $id = null){

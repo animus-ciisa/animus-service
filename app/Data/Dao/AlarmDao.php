@@ -102,8 +102,9 @@ class AlarmDao
 
     public static function getFullDetection($detectionId)
     {
-        return DetectionEntity::with('images.image')
+        $data = DetectionEntity::with('images.image')
             ->with('alarm.home.habitants.user')
             ->where('id_deteccion', $detectionId)->get()->first();
+        return $data;
     }
 }
