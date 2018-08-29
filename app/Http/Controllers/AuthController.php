@@ -7,6 +7,8 @@ use App\Data\Dao\HomeDao;
 use App\Util\ValidatorUtil;
 use App\Util\GeneratorUtil;
 use Mail;
+use QrCode;
+use Intervention\Image\Facades\Image;
 
 class AuthController extends Controller 
 {
@@ -87,6 +89,18 @@ class AuthController extends Controller
             } 
         }   
         return response()->json($data, $data->code);
+    }
+
+    public function qrGenerate($habitantId)
+    {
+        header("Content-Type: image/png");
+        $qrText = json_encode(['habitantId' => $habitantId]);
+        return QrCode::format('png')->size(200)->generate($qrText);
+        /*if ($authHome = JWTAuth::parseToken()->authenticate())
+        {
+            $qrText = json_encode(['habitantId' => $habitantId]);
+            return QrCode::format('png')->size(200)->generate($qrText);
+        }*/
     }
 
 }

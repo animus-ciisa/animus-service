@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/',function(){
     return ['message' => 'Hello GCLOUD'];
 });    
@@ -20,6 +21,7 @@ Route::group(['prefix' => '/api/home'], function() {
 });
 
 Route::group(['prefix' => '/api/auth'], function() {
+    Route::get('qr/{idHabitant}', 'AuthController@qrGenerate');
     Route::post('renew','AuthController@renew')->middleware('jwt.auth');
     Route::post('/','AuthController@authenticate');
     Route::post('recover-password','AuthController@recoverPassword');
@@ -41,10 +43,19 @@ Route::group(['prefix' => '/api/habitant'], function() {
 Route::resource('/api/user','UserController');
 Route::group(['prefix' => '/api/user'], function() {
     Route::post('auth','UserController@authenticate');
-    Route::post('auth/renew','UserController@renew');    
+    Route::post('auth/renew', 'UserController@renew');
 });
 
 Route::resource('/api/alarms/in-time-range','AlarmInTimeRangeController');
 Route::group(['prefix' => '/api/alarms'], function() {
     Route::put('{idAlarma}','AlarmInTimeRangeController@update');
 }); 
+
+/*Route::get('/api/qr/generate/{idHabitant}', function($habitantId){
+    echo 'El id es: ' . $habitantId;
+    //return QrCode::format('png')->size(200)->generate('Make me into a QrCode!');
+});
+
+Route::get('/api/qr/pruebaImg', function(){
+    return '<img src="http://localhost/animus-service/public/api/qr/prueba">';
+});*/

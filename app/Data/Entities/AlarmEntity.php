@@ -53,19 +53,19 @@ class AlarmEntity extends Model
         'fecha_hora_modificacion_alarma'
     ];
 
-    protected $appends = ['id','idHogar','idTypeAlarm','idPerson','idTimeStartAlarm','idTimeFinishAlarm','stateMondayAlarm','stateTuesdayAlarm','stateWednesdayAlarm','stateThursdayAlarm','stateFridayAlarm','stateSaturdayAlarm','stateSundayAlarm','stateAlarm' ,'created', 'modified'];
+    protected $appends = ['id','idHome','idType','idPerson','startHour','endHour','monday','tuesday','wednesday','thursday','friday','saturday','sunday','status' ,'created', 'modified'];
 
     public function getIdAttribute()
     {
         return $this->attributes['id_alarma'];
     }
 
-    public function getIdHogarAttribute()
+    public function getIdHomeAttribute()
     {
         return $this->attributes['id_hogar'];
     }
 
-     public function getIdTypeAlarmAttribute()
+     public function getIdTypeAttribute()
     {
         return $this->attributes['id_tipo_alarma'];
     }
@@ -75,52 +75,52 @@ class AlarmEntity extends Model
         return $this->attributes['id_persona'];
     }
 
-    public function getIdTimeStartAlarmAttribute()
+    public function getStartHourAttribute()
     {
         return $this->attributes['hora_inicio_alarma'];
     }
 
-    public function getIdTimeFinishAlarmAttribute()
+    public function getEndHourAttribute()
     {
         return $this->attributes['hora_termino_alarma'];
     }
 
-    public function getStateMondayAlarmAttribute()
+    public function getMondayAttribute()
     {
         return $this->attributes['estado_lunes_alarma'];
     }
 
-    public function getStateTuesdayAlarmAttribute()
+    public function getTuesdayAttribute()
     {
         return $this->attributes['estado_martes_alarma'];
     }
 
-    public function getStateWednesdayAlarmAttribute()
+    public function getWednesdayAttribute()
     {
         return $this->attributes['estado_miercoles_alarma'];
     }
 
-    public function getStateThursdayAlarmAttribute()
+    public function getThursdayAttribute()
     {
         return $this->attributes['estado_jueves_alarma'];
     }
 
-    public function getStateFridayAlarmAttribute()
+    public function getFridayAttribute()
     {
         return $this->attributes['estado_viernes_alarma'];
     }
 
-    public function getStateSaturdayAlarmAttribute()
+    public function getSaturdayAttribute()
     {
         return $this->attributes['estado_sabado_alarma'];
     }
 
-    public function getStateSundayAlarmAttribute()
+    public function getSundayAttribute()
     {
         return $this->attributes['estado_domingo_alarma'];
     }
 
-    public function getStateAlarmAttribute()
+    public function getStatusAttribute()
     {
         return $this->attributes['estado_alarma'];
     }
