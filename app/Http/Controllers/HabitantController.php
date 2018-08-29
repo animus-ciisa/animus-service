@@ -87,7 +87,7 @@ class HabitantController extends Controller
         return response()->json($data, $data->code);
     }
 
-    
+
     public function storeImage($idHabitant, Request $request)
     {
         $data = ControllerResponses::badRequestResp();

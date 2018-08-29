@@ -22,7 +22,7 @@ class UserController extends Controller
         $response = ControllerResponses::badRequestResp();
         if($this->validateUserRequest($request->all())){
 
-            if(!$habitant = HabitantDao::byId($request->input('idPerson'))){
+            if(!$habitant = HabitantDao::byId($request->input('idHabitant'))){
                 $response = ControllerResponses::unprocesableResp(['Habitante no existe']);
             }else{
                 $password = GeneratorUtil::aleatoryPassword();
@@ -31,7 +31,7 @@ class UserController extends Controller
                     $credentials = ['imei_usuario' => $request->input('imei'), 'password' => $password];
                     $token = JWTAuth::attempt($credentials);
                     $user->load('habitant');
-                    $user['access'] = ['serial' => $password];
+                    $user['access'] = ['token' => $password];
                     $user['session'] = ['token'=> $token];
                     $response = ControllerResponses::createdResp($user);
                 }
@@ -61,8 +61,9 @@ class UserController extends Controller
             }
         }
         return response()->json($response, $response->code);
-
     }
+
+
 
     public function renew(Request $request)
     {

@@ -1,6 +1,4 @@
 <?php
-use GuzzleHttp\Client;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +9,7 @@ use GuzzleHttp\Client;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/',function(){
     return ['message' => 'Hello GCLOUD'];
 });    
@@ -21,6 +20,7 @@ Route::group(['prefix' => '/api/home'], function() {
 });
 
 Route::group(['prefix' => '/api/auth'], function() {
+    Route::get('qr/{idHabitant}', 'AuthController@qrGenerate');
     Route::post('renew','AuthController@renew')->middleware('jwt.auth');
     Route::post('/','AuthController@authenticate');
     Route::post('recover-password','AuthController@recoverPassword');
@@ -42,21 +42,7 @@ Route::group(['prefix' => '/api/habitant'], function() {
 Route::resource('/api/user','UserController');
 Route::group(['prefix' => '/api/user'], function() {
     Route::post('auth','UserController@authenticate');
-    Route::post('auth/renew','UserController@renew');
-    Route::post('notify', function(){
-        $client = new Client(['headers' => [
-            'Authorization' => 'key=AIzaSyD004GHyZqw75enxwCJHbhUUEHOFgaiQZw',
-            'content-type' => 'application/json'
-        ]]);
-        $res = $client->post('https://fcm.googleapis.com/fcm/send', ['body' => json_encode([
-            "data" => [
-                "title" => "Hola mundo animus",
-                "message" => "Que sucede con los animus ???"
-            ],
-            "to" => "e9ilCBL70ns:APA91bFgTT3Wk8aSlTUkF4hGZTFkt1yz1a145xd-rwO8gxVm3HcgbTKVW-CBxKZOoJAyU8L3rzM04mduCAyOyH6ZinXJStZM68PQStRuOFqy7-pdEy78SbcXFoVCyd9u0Pw8gTsalSYvHjOFarKCE7vyrWmTWcR0ig"
-        ])]);
-        return ['message' => json_decode($res->getBody())];
-    });
+    Route::post('auth/renew', 'UserController@renew');
 });
 
 Route::resource('/api/alarms/in-time-range','AlarmInTimeRangeController');
@@ -65,4 +51,6 @@ Route::group(['prefix' => '/api/alarms'], function() {
     Route::put('{idAlarma}','AlarmInTimeRangeController@update');
 }); 
 
-
+/*Route::get('/api/qr/pruebaImg', function(){
+    return '<img src="http://localhost/animus-service/public/api/qr/prueba">';
+});*/
