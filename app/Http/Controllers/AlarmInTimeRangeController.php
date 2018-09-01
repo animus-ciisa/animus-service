@@ -7,7 +7,8 @@ use App\Data\Dao\AlarmDao;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use GuzzleHttp\Client;
-
+use Illuminate\Support\Facades\Storage;
+use App\Data\Dao\ImageDao;
 
 class AlarmInTimeRangeController extends Controller
 {
@@ -30,7 +31,6 @@ class AlarmInTimeRangeController extends Controller
             
             if($this->validateAlarm($request->all()))
             {
-                
                 $alarm = $this->saveAlarm($request, 1,$authHome->id);
                 if($alarm != null){
                     $data = ControllerResponses::createdResp(['id'=> $alarm->id]);
@@ -92,19 +92,23 @@ class AlarmInTimeRangeController extends Controller
     public function detection(Request $request)
     {
         $data = ControllerResponses::badRequestResp();
-        //if ($authHome = JWTAuth::parseToken()->authenticate())
-        //{
-        $detection = AlarmDao::saveDetection($request->input('idAlarm'), $request->input('hasDetection'));
-
-        if($request->has('idHabitant')){
-            $image = $this->saveImage($request, $request->input('idHabitant'));
-            if($image){
-                AlarmDao::saveDetectionImage($detection->id, $image->id);
+        if ($authHome = JWTAuth::parseToken()->authenticate())
+        {
+            $alarm = AlarmDao::byId($request->input('idAlarm'));
+            if($alarm->idHome == $authHome->id){
+                $detection = AlarmDao::saveDetection($request->input('idAlarm'), $request->input('hasDetection'));
+                if($request->input('hasDetection') == 1){
+                    $image = $this->saveImage($request, $alarm->habitant->id);
+                    if($image){
+                        AlarmDao::saveDetectionImage($detection->id, $image->id);
+                    }
+                }
+                $notification = $this->notify($alarm, $detection);
+                $data = ControllerResponses::createdResp(['detection'=> AlarmDao::getFullDetection($detection->id)]);
+            }else{
+                $data = ControllerResponses::notFoundResp();
             }
         }
-
-        $data = ControllerResponses::createdResp(['notify' => $this->notify($detection->id)]);
-        //}
         return response()->json($data, $data->code);
     }
 
@@ -113,10 +117,10 @@ class AlarmInTimeRangeController extends Controller
 
     }
 
-    private function notify($detection)
+    private function notify($alarm, $detection)
     {
         $registrationIds = [];
-        $detectionData = AlarmDao::getFullDetection($detection);
+        $detectionData = AlarmDao::getFullDetection($detection->id);
         if($detectionData != null){
             foreach ($detectionData->alarm->home->habitants as $habitant){
                 if($habitant->user != null){
@@ -130,11 +134,17 @@ class AlarmInTimeRangeController extends Controller
                 'Authorization' => 'key=AIzaSyD004GHyZqw75enxwCJHbhUUEHOFgaiQZw',
                 'content-type' => 'application/json'
             ]]);
+            $body = ' fue detectado por el monitoreo en el rango de hora especificado';
+            if($detection->has == 0){
+                $body = ' no' . $body;
+            }
+            $body = $alarm->habitant->name . $body;
             $res = $client->post('https://fcm.googleapis.com/fcm/send', ['body' => json_encode([
                 "data" => [
-                    "title" => "Nueva de tección de Animus",
-                    'body' => "La alarma se a detonado entera de brigida",
-                    "message" => "Que sucede con los animus ???"
+                    "title" => "Alarma Animus",
+                    'body' => $body,
+                    "message" => "Que sucede con los animus ???",
+                    "detection" => $detectionData
                 ],
                 "registration_ids" => $registrationIds
             ])]);
@@ -149,7 +159,7 @@ class AlarmInTimeRangeController extends Controller
             $path = Storage::disk('public')->put('images', $request->file('image'));
             $nameImagen = $request->file('image')->getClientOriginalName();
         }
-        $image = ImageDao::save($idHabitant, $path, $nameImagen,
+        $image = ImageDao::save($idHabitant, 'storage/app/public/'.$path, $nameImagen,
             $request->input('yRectangle'), $request->input('xRectangle'), $request->input('hRectangle'),
             $request->input('wRectangle'), $request->input('type'), $id);
         return $image;

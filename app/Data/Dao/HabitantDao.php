@@ -8,7 +8,7 @@ class HabitantDao
 {
     public static function byId($id)
     {
-        $habitant = HabitantEntity::where('id_persona', $id)->first();
+        $habitant = HabitantEntity::with('user')->where('id_persona', $id)->first();
         if($habitant){
             return $habitant;
         }

@@ -10,7 +10,7 @@ class AlarmDao
 {
     public static function byId($id)
     {
-        $alarm = AlarmEntity::where('id_alarma', $id)->first();
+        $alarm = AlarmEntity::with('habitant')->where('id_alarma', $id)->first();
         if($alarm){
             return $alarm;
         }

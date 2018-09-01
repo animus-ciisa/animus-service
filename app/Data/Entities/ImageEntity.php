@@ -71,7 +71,7 @@ class ImageEntity extends Model
 
     public function gethRectangleAttribute()
     {
-        return $this->attributes['largo_rectangulo_imagen'];
+        return $this->attributes['alto_rectangulo_imagen'];
     }
 
     public function getwRectangleAttribute()

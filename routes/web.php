@@ -37,6 +37,7 @@ Route::group(['prefix' => '/api/habitant'], function() {
     //Route::delete('{idHabitant}','HabitantController@destroy');    
     //Route::put('{idHabitant}','HabitantController@update');
     Route::put('{idHabitant}/images/{idImage}','HabitantController@updateImage');
+    Route::post('user', 'HabitantController@user');
 });
 
 Route::resource('/api/user','UserController');

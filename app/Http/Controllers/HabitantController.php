@@ -25,10 +25,24 @@ class HabitantController extends Controller
         return response()->json($data, $data->code);
     }
 
-    public function store(Request $request)
+    public function user(Request $request)
     {
         $data = ControllerResponses::badRequestResp();
         if ($authHome = JWTAuth::parseToken()->authenticate()) {
+            $data = ControllerResponses::notFoundResp();
+            $habitant = HabitantDao::byId($request->input('idHabitant'));
+            if($habitant && $habitant->idHogar == $authHome->id && $habitant->user != null){
+                $data = ControllerResponses::okResp(['user' => $habitant->user]);
+            }
+
+        }
+        return response()->json($data, $data->code);
+    }
+
+    public function store(Request $request)
+    {
+        $data = ControllerResponses::badRequestResp();
+        if ($authHome = JWTAuth::parseToken()->authenticate() && $this->validateUser($request->all())) {
             $validate = \Validator::make($request->all(),[
                 'type' => 'required',
                 'name' => 'required',
@@ -145,4 +159,14 @@ class HabitantController extends Controller
         ]);
         return !$validate->fails();
     }
+
+    private function validateUser($data)
+    {
+        $validate = \Validator::make($data,[
+            'idHabitant' => 'required'
+        ]);
+        return !$validate->fails();
+    }
+
+
 }

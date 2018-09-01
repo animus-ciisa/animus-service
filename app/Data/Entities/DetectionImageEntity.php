@@ -7,8 +7,8 @@ class DetectionImageEntity extends Model
     protected $table = 'deteccion_imagen';
     protected $primaryKey = 'id_deteccion_imagen';
 
-    const CREATED_AT    =   'fecha_hora_registro_deteccion';
-    const UPDATED_AT    =   'fecha_hora_modificacion_deteccion';
+    const CREATED_AT    =   'fecha_hora_registro_deteccion_imagen';
+    const UPDATED_AT    =   'fecha_hora_modificacion_deteccion_imagen';
 
     protected $fillable =[
         'id_deteccion',
@@ -19,8 +19,8 @@ class DetectionImageEntity extends Model
         'id_deteccion_imagen',
         'id_deteccion',
         'id_imagen',
-        'fecha_hora_registro_deteccion',
-        'fecha_hora_modificacion_deteccion'
+        'fecha_hora_registro_deteccion_imagen',
+        'fecha_hora_modificacion_deteccion_imagen'
     ];
 
     protected $appends = ['id', 'detectionId', 'imageId'];
@@ -42,6 +42,6 @@ class DetectionImageEntity extends Model
 
     public function image()
     {
-        return $this->hasOne('App\Data\Entities\ImageEntity', 'id_deteccion', 'id_imagen');
+        return $this->hasOne('App\Data\Entities\ImageEntity', 'id_imagen', 'id_imagen');
     }
 }

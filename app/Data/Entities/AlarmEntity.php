@@ -138,4 +138,9 @@ class AlarmEntity extends Model
     {
         return $this->hasOne('App\Data\Entities\HomeEntity', 'id_hogar', 'id_hogar');
     }
+
+    public function habitant()
+    {
+        return $this->hasOne('App\Data\Entities\HabitantEntity', 'id_persona', 'id_persona');
+    }
 }
