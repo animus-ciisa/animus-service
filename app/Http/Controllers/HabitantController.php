@@ -28,9 +28,10 @@ class HabitantController extends Controller
     public function user(Request $request)
     {
         $data = ControllerResponses::badRequestResp();
-        if ($authHome = JWTAuth::parseToken()->authenticate() && $this->validateUser($request->all())) {
+        if (($authHome = JWTAuth::parseToken()->authenticate()) && $this->validateUser($request->all())) {
             $data = ControllerResponses::notFoundResp();
             $habitant = HabitantDao::byId($request->input('idHabitant'));
+            //$data = ControllerResponses::okResp(['habitant' => $habitant, 'home' => $authHome]);
             if($habitant && $habitant->idHogar == $authHome->id && $habitant->user != null){
                 $data = ControllerResponses::okResp(['user' => $habitant->user]);
             }
