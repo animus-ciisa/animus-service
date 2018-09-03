@@ -36,4 +36,13 @@ class UserDao
         }
         return $user;
     }
+
+    public static function delete($id)
+    {
+        $user = UserEntity::find($id)->first();
+        if($user != null){
+            return $user->delete();
+        }
+        return false;
+    }
 }

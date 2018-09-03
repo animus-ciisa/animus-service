@@ -33,11 +33,9 @@ Route::group(['prefix' => '/api/camera'], function() {
 Route::resource('/api/habitant','HabitantController');
 Route::group(['prefix' => '/api/habitant'], function() {
     Route::post('{idHabitant}/images','HabitantController@storeImage');
-    //Route::put('{idHabitant}','HabitantController@update');
-    //Route::delete('{idHabitant}','HabitantController@destroy');    
-    //Route::put('{idHabitant}','HabitantController@update');
     Route::put('{idHabitant}/images/{idImage}','HabitantController@updateImage');
     Route::post('user', 'HabitantController@user');
+    Route::delete('user/{habitantId}', 'HabitantController@deleteUser');
 });
 
 Route::resource('/api/user','UserController');
@@ -51,7 +49,3 @@ Route::group(['prefix' => '/api/alarms'], function() {
     Route::post('detection','AlarmInTimeRangeController@detection');
     Route::put('{idAlarma}','AlarmInTimeRangeController@update');
 }); 
-
-/*Route::get('/api/qr/pruebaImg', function(){
-    return '<img src="http://localhost/animus-service/public/api/qr/prueba">';
-});*/

@@ -9,7 +9,7 @@ use App\Util\ValidatorUtil;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Storage;
-
+use App\Data\Dao\UserDao;
 
 class HabitantController extends Controller
 {
@@ -28,7 +28,7 @@ class HabitantController extends Controller
     public function user(Request $request)
     {
         $data = ControllerResponses::badRequestResp();
-        if ($authHome = JWTAuth::parseToken()->authenticate()) {
+        if ($authHome = JWTAuth::parseToken()->authenticate() && $this->validateUser($request->all())) {
             $data = ControllerResponses::notFoundResp();
             $habitant = HabitantDao::byId($request->input('idHabitant'));
             if($habitant && $habitant->idHogar == $authHome->id && $habitant->user != null){
@@ -39,10 +39,24 @@ class HabitantController extends Controller
         return response()->json($data, $data->code);
     }
 
+    public function deleteUser($habitantId)
+    {
+        $data = ControllerResponses::badRequestResp();
+        if ($authHome = JWTAuth::parseToken()->authenticate()) {
+            $data = ControllerResponses::notFoundResp();
+            $habitant = HabitantDao::byId($habitantId);
+            if($habitant->user != null){
+                $delete = UserDao::delete($habitant->user->id);
+                $data = ControllerResponses::okResp(['status' => $delete]);
+            }
+        }
+        return response()->json($data, $data->code);
+    }
+
     public function store(Request $request)
     {
         $data = ControllerResponses::badRequestResp();
-        if ($authHome = JWTAuth::parseToken()->authenticate() && $this->validateUser($request->all())) {
+        if ($authHome = JWTAuth::parseToken()->authenticate()) {
             $validate = \Validator::make($request->all(),[
                 'type' => 'required',
                 'name' => 'required',
