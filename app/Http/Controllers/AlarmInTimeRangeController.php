@@ -160,8 +160,7 @@ class AlarmInTimeRangeController extends Controller
             $nameImagen = $request->file('image')->getClientOriginalName();
         }
         $image = ImageDao::save($idHabitant, 'storage/app/public/'.$path, $nameImagen,
-            $request->input('yRectangle'), $request->input('xRectangle'), $request->input('hRectangle'),
-            $request->input('wRectangle'), $request->input('type'), $id);
+            0, 0, 0, 0, 0, $id);
         return $image;
     }
 
