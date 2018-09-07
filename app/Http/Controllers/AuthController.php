@@ -74,7 +74,7 @@ class AuthController extends Controller
                         $toEmail = $home->email_hogar;
                         $toName = $home->nick_hogar;
                         
-                        Mail::send('Mail.changePassword',["password" => $newPassword], function ($message) use($fromEmail,$fromName,$toEmail,$toName) {
+                        Mail::send('Mail.changePassword',["home" => $home, "password" => $newPassword], function ($message) use($fromEmail,$fromName,$toEmail,$toName) {
                             $message->from($fromEmail, $fromName);
                             $message->sender($fromEmail, $fromName);
                             $message->to($toEmail, $toName);   

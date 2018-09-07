@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserDao
 {
-    public static function save($idPerson, $imei, $device, $password, $id = null)
+    public static function save($idPerson, $imei, $device, $password, $fcmToken, $id = null)
     {
         $user = null;
         if($id != null){
@@ -20,6 +20,7 @@ class UserDao
         $user->id_persona = $idPerson;
         $user->imei_usuario = $imei;
         $user->dispositivo_usuario = $device;
+        $user->fcm_token = $fcmToken;
         $user->password = Hash::make($password);
         if($user->save()){
             return $user;

@@ -17,6 +17,7 @@ Route::resource('/api/home','HomeController');
 Route::group(['prefix' => '/api/home'], function() {
     Route::post('validate-password','HomeController@validateMail');
     Route::post('insert','HomeController@store');
+    Route::get('{id}/habitants','HomeController@habitants');
 });
 
 Route::group(['prefix' => '/api/auth'], function() {

@@ -26,7 +26,7 @@ class UserController extends Controller
                 $response = ControllerResponses::unprocesableResp(['Habitante no existe']);
             }else{
                 $password = GeneratorUtil::aleatoryPassword();
-                $user = UserDao::save($habitant->id, $request->input('imei'), $request->input('device'), $password);
+                $user = UserDao::save($habitant->id, $request->input('imei'), $request->input('device'), $password, $request->input('fcm'));
                 if($user){
                     $credentials = ['imei_usuario' => $request->input('imei'), 'password' => $password];
                     $token = JWTAuth::attempt($credentials);
@@ -86,9 +86,10 @@ class UserController extends Controller
 
     private function validateUserRequest($user){
         $validate = \Validator::make($user,[
-            'idPerson' => 'required',
+            'idHabitant' => 'required',
             'imei' => 'required',
             'device' => 'required',
+            'fcm' => 'required'
         ]);
         return !$validate->fails();
     }
