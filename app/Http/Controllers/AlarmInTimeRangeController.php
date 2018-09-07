@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Data\Dao\AlarmDao;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
-use App\Data\Dao\ImageDao;
 
 class AlarmInTimeRangeController extends Controller
 {
@@ -50,7 +48,6 @@ class AlarmInTimeRangeController extends Controller
             
             if($this->validateAlarm($request->all()))
             {
-                
                 $alarm = $this->saveAlarm($request, 1,$authHome->id,$id);
                 if($alarm != null){
                     $data = ControllerResponses::createdResp(['id'=> $alarm->id]);
@@ -64,7 +61,7 @@ class AlarmInTimeRangeController extends Controller
 
     }
     
-    private function saveAlarm($request, $type,$idHome, $id = null)
+    private function saveAlarm($request, $type ,$idHome, $id = null)
     {
             $alarm = AlarmDao::save($idHome,
             $type, $request->input('idPerson'),
@@ -92,29 +89,17 @@ class AlarmInTimeRangeController extends Controller
     public function detection(Request $request)
     {
         $data = ControllerResponses::badRequestResp();
-        if ($authHome = JWTAuth::parseToken()->authenticate())
+        /*if ($authHome = JWTAuth::parseToken()->authenticate())
         {
-            $alarm = AlarmDao::byId($request->input('idAlarm'));
-            if($alarm->idHome == $authHome->id){
-                $detection = AlarmDao::saveDetection($request->input('idAlarm'), $request->input('hasDetection'));
-                if($request->input('hasDetection') == 1){
-                    $image = $this->saveImage($request, $alarm->habitant->id);
-                    if($image){
-                        AlarmDao::saveDetectionImage($detection->id, $image->id);
-                    }
-                }
-                $notification = $this->notify($alarm, $detection);
-                $data = ControllerResponses::createdResp(['detection'=> AlarmDao::getFullDetection($detection->id)]);
-            }else{
-                $data = ControllerResponses::notFoundResp();
-            }
-        }
+
+        }*/
+        $alarm = AlarmDao::byId($request->input('alarmId'));
+        $image = $this->saveImage($request);
+        $detection = AlarmDao::saveDetection($request->input('alarmId'), $request->input('type'), $image);
+        $this->notify($alarm, $detection);
+        $data = ControllerResponses::createdResp(['detection'=> AlarmDao::getFullDetection($detection->id)]);
+
         return response()->json($data, $data->code);
-    }
-
-    private function validataDetection()
-    {
-
     }
 
     private function notify($alarm, $detection)
@@ -134,15 +119,10 @@ class AlarmInTimeRangeController extends Controller
                 'Authorization' => 'key=AIzaSyD004GHyZqw75enxwCJHbhUUEHOFgaiQZw',
                 'content-type' => 'application/json'
             ]]);
-            $body = ' fue detectado por el monitoreo en el rango de hora especificado';
-            if($detection->has == 0){
-                $body = ' no' . $body;
-            }
-            $body = $alarm->habitant->name . $body;
             $res = $client->post('https://fcm.googleapis.com/fcm/send', ['body' => json_encode([
                 "data" => [
                     "title" => "Alarma Animus",
-                    'body' => $body,
+                    'body' => $this->getDetectionMessage($alarm->habitant->name, $detection->type),
                     "message" => "Que sucede con los animus ???",
                     "detection" => $detectionData
                 ],
@@ -153,15 +133,33 @@ class AlarmInTimeRangeController extends Controller
         return null;
     }
 
-    private function saveImage(Request $request, $idHabitant, $id = null){
+    private function getDetectionMessage($habitantName, $detectionType)
+    {
+        $text = '';
+        switch ($detectionType){
+            case 1:
+                $text = $habitantName . ' fue detectado en el rango de hora especificado';
+                break;
+            case 2:
+                $text = $habitantName . ' no fue detectado en el rango de hora especificado';
+                break;
+            case 3:
+                $text = 'Se ha detectado un extraño';
+                break;
+            default:
+                $text = 'Notificacion Animus';
+                break;
+        }
+        return $text;
+    }
+
+    private function saveImage(Request $request){
+        $path = null;
         if($request->file('image'))
         {
             $path = Storage::disk('public')->put('images', $request->file('image'));
-            $nameImagen = $request->file('image')->getClientOriginalName();
         }
-        $image = ImageDao::save($idHabitant, 'storage/app/public/'.$path, $nameImagen,
-            0, 0, 0, 0, 0, $id);
-        return $image;
+        return $path;
     }
 
     private function validateAlarm($data)

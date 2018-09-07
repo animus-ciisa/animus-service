@@ -20,6 +20,7 @@ class UserDao
         $user->id_persona = $idPerson;
         $user->imei_usuario = $imei;
         $user->dispositivo_usuario = $device;
+        $user->fcm_token = $fcmToken;
         $user->password = Hash::make($password);
         $user->fcm_token = $fcmToken;
         if($user->save()){

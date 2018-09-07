@@ -83,4 +83,9 @@ class HabitantEntity extends Model
     {
         return $this->hasOne('App\Data\Entities\UserEntity', 'id_persona', 'id_persona');
     }
+
+    public function emotions()
+    {
+        return $this->hasMany('App\Data\Entities\EmotionEntity', 'id_persona', 'id_persona');
+    }
 }

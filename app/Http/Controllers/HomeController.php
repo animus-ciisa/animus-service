@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Data\Dao\HomeDao;
+use App\Data\Dao\HabitantDao;
 use App\Util\ValidatorUtil;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -82,6 +83,13 @@ class HomeController extends Controller
                 $data = ControllerResponses::okResp(['exists'=> ($mailHome != null) ]);
             } 
         }   
+        return response()->json($data, $data->code);
+    }
+
+    public function habitants($id)
+    {
+        $habitants = HabitantDao::byHomeWithEmotion($id);
+        $data = ControllerResponses::okResp($habitants);
         return response()->json($data, $data->code);
     }
   

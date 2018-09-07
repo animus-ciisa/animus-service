@@ -15,7 +15,7 @@ class ImageDao
         return null;
     }
 
-    public static function save($idPersona,$path,$name,$yRectangle,$xRectangle,$hRectangle,$wRectangle,$type, $id = null)
+    public static function save($path,$name,$yRectangle,$xRectangle,$hRectangle,$wRectangle,$type, $id = null)
     {
         $image = null;
 		if($id != null){
@@ -25,8 +25,7 @@ class ImageDao
 			}
 		}else{
             $image = new ImageEntity();
-        }	
-        $image->id_persona = $idPersona;
+        }
         $image->path_imagen = $path;
         $image->nombre_imagen = $name;
         $image->y_rectangulo_imagen = $yRectangle;

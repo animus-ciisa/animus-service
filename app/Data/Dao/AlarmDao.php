@@ -62,7 +62,7 @@ class AlarmDao
         }
     }
 
-    public static function saveDetection($alarm, $hasDetection, $id = null)
+    public static function saveDetection($alarm, $type, $image, $id = null)
     {
         $detection = null;
         if($id != null){
@@ -74,7 +74,8 @@ class AlarmDao
             $detection = new DetectionEntity();
         }
         $detection->id_alarma = $alarm;
-        $detection->hubo_deteccion = $hasDetection;
+        $detection->id_tipo_deteccion = $type;
+        $detection->imagen_deteccion = $image;
         if($detection->save()){
             return $detection;
         }
