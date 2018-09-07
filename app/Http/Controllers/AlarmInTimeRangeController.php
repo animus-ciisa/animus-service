@@ -30,7 +30,6 @@ class AlarmInTimeRangeController extends Controller
             
             if($this->validateAlarm($request->all()))
             {
-                
                 $alarm = $this->saveAlarm($request, 1,$authHome->id);
                 if($alarm != null){
                     $data = ControllerResponses::createdResp(['id'=> $alarm->id]);
@@ -64,7 +63,7 @@ class AlarmInTimeRangeController extends Controller
 
     }
     
-    private function saveAlarm($request, $type,$idHome, $id = null)
+    private function saveAlarm($request, $type ,$idHome, $id = null)
     {
             $alarm = AlarmDao::save($idHome,
             $type, $request->input('idPerson'),
@@ -94,8 +93,8 @@ class AlarmInTimeRangeController extends Controller
         $data = ControllerResponses::badRequestResp();
         //if ($authHome = JWTAuth::parseToken()->authenticate())
         //{
-        $detection = AlarmDao::saveDetection($request->input('idAlarm'), $request->input('hasDetection'));
-        if($request->has('idHabitant')){
+        $detection = AlarmDao::saveDetection($request->input('idAlarm'), $request->input('type'));
+        if($request->input('type') != 2){
             $image = $this->saveImage($request, $request->input('idHabitant'));
             if($image){
                 AlarmDao::saveDetectionImage($detection->id, $image->id);
@@ -142,13 +141,13 @@ class AlarmInTimeRangeController extends Controller
         return null;
     }
 
-    private function saveImage(Request $request, $idHabitant, $id = null){
+    private function saveImage(Request $request, $id = null){
         if($request->file('image'))
         {
             $path = Storage::disk('public')->put('images', $request->file('image'));
             $nameImagen = $request->file('image')->getClientOriginalName();
         }
-        $image = ImageDao::save($idHabitant, $path, $nameImagen,
+        $image = ImageDao::save($path, $nameImagen,
             $request->input('yRectangle'), $request->input('xRectangle'), $request->input('hRectangle'),
             $request->input('wRectangle'), $request->input('type'), $id);
         return $image;
