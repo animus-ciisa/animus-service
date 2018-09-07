@@ -158,6 +158,9 @@ class AlarmInTimeRangeController extends Controller
         if($request->file('image'))
         {
             $path = Storage::disk('public')->put('images', $request->file('image'));
+        }else if($request->has('image')){
+            $file_name = 'image_'.time().'.bmp';
+            $path = Storage::disk('public')->put($file_name, base64_decode($request->input('image')));
         }
         return $path;
     }
