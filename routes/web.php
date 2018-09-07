@@ -48,4 +48,4 @@ Route::resource('/api/alarms/in-time-range','AlarmInTimeRangeController');
 Route::group(['prefix' => '/api/alarms'], function() {
     Route::post('detection','AlarmInTimeRangeController@detection');
     Route::put('{idAlarma}','AlarmInTimeRangeController@update');
-}); 
+});
