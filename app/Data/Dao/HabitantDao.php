@@ -51,6 +51,11 @@ class HabitantDao
         return false;
     }
 
+    public static function byHome($idHogar)
+    {
+        return HabitantEntity::with('user')->where('id_hogar', $idHogar)->get();
+    }
+
     public static function byHomeWithEmotion($idHogar)
     {
         return HabitantEntity::with('emotions')

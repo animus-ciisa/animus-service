@@ -25,11 +25,16 @@ class DetectionEntity extends Model
         'fecha_hora_modificacion_deteccion'
     ];
 
-    protected $appends = ['id', 'type', 'image', 'created'];
+    protected $appends = ['id', 'alarmId', 'type', 'image', 'created'];
 
     public function getIdAttribute()
     {
         return $this->attributes['id_deteccion'];
+    }
+
+    public function getAlarmidAttribute()
+    {
+        return $this->attributes['id_alarma'];
     }
 
     public function getTypeAttribute()

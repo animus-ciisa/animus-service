@@ -11,7 +11,6 @@ class EmotionEntity extends Model
     const UPDATED_AT    =   'fecha_hora_modificacion_emocion';
 
     protected $fillable = [
-        'id_emocion',
         'id_persona',
         'tipo_emocion'
     ];
