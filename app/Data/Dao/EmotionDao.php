@@ -11,4 +11,9 @@ class EmotionDao
 
     }
 
+    public static function save()
+    {
+
+    }
+
 }

@@ -91,7 +91,6 @@ class AlarmInTimeRangeController extends Controller
         $data = ControllerResponses::badRequestResp();
         /*if ($authHome = JWTAuth::parseToken()->authenticate())
         {
-
         }*/
         $alarm = AlarmDao::byId($request->input('alarmId'));
         $image = $this->saveImage($request);
