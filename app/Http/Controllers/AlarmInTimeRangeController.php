@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use App\Data\Dao\AlarmDao;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
+use App\Data\Dao\HabitantDao;
 
 class AlarmInTimeRangeController extends Controller
 {
@@ -89,16 +91,61 @@ class AlarmInTimeRangeController extends Controller
     public function detection(Request $request)
     {
         $data = ControllerResponses::badRequestResp();
-        /*if ($authHome = JWTAuth::parseToken()->authenticate())
+        if ($authHome = JWTAuth::parseToken()->authenticate())
         {
-        }*/
-        $alarm = AlarmDao::byId($request->input('alarmId'));
-        $image = $this->saveImage($request);
-        $detection = AlarmDao::saveDetection($request->input('alarmId'), $request->input('type'), $image);
-        $this->notify($alarm, $detection);
-        $data = ControllerResponses::createdResp(['detection'=> AlarmDao::getFullDetection($detection->id)]);
+            $alarmId = null;
+            $alarm = null;
+            if($request->has('alarmId')){
+                $alarm = AlarmDao::byId($request->input('alarmId'));
+                if($alarm != null){
+                    $alarmId = $alarm->id;
+                }
+            }
+            $image = $this->saveImage($request);
+            $detection = AlarmDao::saveDetection($alarmId, $request->input('type'), $image);
 
+            $this->notify2($this->getHomeFcmTokens($authHome->id), $detection, $alarm);
+
+            $data = ControllerResponses::createdResp(['detection'=> AlarmDao::getFullDetection($detection->id)]);
+        }
         return response()->json($data, $data->code);
+    }
+
+    private function getHomeFcmTokens($homeId)
+    {
+        $habitants = HabitantDao::byHome($homeId);
+        $fcmTokens = [];
+        foreach ($habitants as $habitant){
+            if($habitant->user != null){
+                $fcmTokens[] = $habitant->user->fcmToken;
+            }
+        }
+        return $fcmTokens;
+    }
+
+    private function notify2($tokens, $detection, $alarm)
+    {
+        if(count($tokens) > 0){
+            $habitantName = '';
+            if($alarm != null){
+                $habitantName = $alarm->habitant->name . ' ' . $alarm->habitant->lastname;
+            }
+            $client = new Client(['headers' => [
+                'Authorization' => 'key=AIzaSyD004GHyZqw75enxwCJHbhUUEHOFgaiQZw',
+                'content-type' => 'application/json'
+            ]]);
+            $res = $client->post('https://fcm.googleapis.com/fcm/send', ['body' => json_encode([
+                "data" => [
+                    "title" => "Alarma Animus",
+                    'body' => $this->getDetectionMessage($detection->type, $habitantName),
+                    "message" => "Que sucede con los animus ???",
+                    "detection" => $detection
+                ],
+                "registration_ids" => $tokens
+            ])]);
+            return json_decode($res->getBody());
+        }
+        return null;
     }
 
     private function notify($alarm, $detection)
@@ -132,7 +179,7 @@ class AlarmInTimeRangeController extends Controller
         return null;
     }
 
-    private function getDetectionMessage($habitantName, $detectionType)
+    private function getDetectionMessage($detectionType, $habitantName)
     {
         $text = '';
         switch ($detectionType){
@@ -154,14 +201,26 @@ class AlarmInTimeRangeController extends Controller
 
     private function saveImage(Request $request){
         $path = null;
+        $name = time();
         if($request->file('image'))
         {
-            $path = Storage::disk('public')->put('images', $request->file('image'));
-        }else if($request->has('image')){
-            $file_name = 'image_'.time().'.bmp';
-            $path = Storage::disk('public')->put($file_name, base64_decode($request->input('image')));
+            $image = $request->file('image');
+            $name .= '.'.$image->getClientOriginalExtension();
+            $path = public_path('/images');
+            $image->move($path, $name);
+            $path = asset('images/'.$name);
+        }else if($request->has('image'))
+        {
+            $name .= '.png';
+            $filename = public_path('/images') . '/' .  $name;
+            $image = Image::make(base64_decode($request->input('image')));
+            $image->save($filename);
+            $path = asset('images/'.$name);
+            //$file_name = 'image_'.time().'.bmp';
+            //$path = Storage::disk('public')->put($file_name, base64_decode($request->input('image')));
         }
         return $path;
+
     }
 
     private function validateAlarm($data)

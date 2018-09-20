@@ -15,7 +15,10 @@ class UserDao
                 return null;
             }
         }else{
-            $user = new UserEntity();
+            $user = UserEntity::where('id_persona', $idPerson)->first();
+            if($user == null){
+                $user = new UserEntity();
+            }
         }
         $user->id_persona = $idPerson;
         $user->imei_usuario = $imei;
@@ -31,7 +34,7 @@ class UserDao
 
     public static function getByImei($imei)
     {
-        $user = UserEntity::where('imei_usuario', $imei)->get()->first();
+        $user = UserEntity::with('habitant')->where('imei_usuario', $imei)->get()->first();
         if(!$user){
             return null;
         }

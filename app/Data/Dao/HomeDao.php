@@ -76,4 +76,10 @@ class HomeDao
 		
 	}
 
+	public static function allHomeData($homeId)
+    {
+        return HomeEntity::with('habitants.emotions')
+            ->with('cameras')->with('alarms.detections')->where('id_hogar', $homeId)->first();
+    }
+
 }

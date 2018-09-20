@@ -72,4 +72,14 @@ class HomeEntity extends Model implements AuthenticatableContract, CanResetPassw
     {
         return $this->hasMany('App\Data\Entities\HabitantEntity', 'id_hogar', 'id_hogar');
     }
+
+    public function cameras()
+    {
+        return $this->hasMany('App\Data\Entities\CameraEntity', 'id_hogar', 'id_hogar');
+    }
+
+    public function alarms()
+    {
+        return $this->hasMany('App\Data\Entities\AlarmEntity', 'id_hogar', 'id_hogar');
+    }
 }

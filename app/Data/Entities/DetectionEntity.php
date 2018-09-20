@@ -16,7 +16,7 @@ class DetectionEntity extends Model
         'imagen_deteccion'
     ];
 
-    protected $hidden =[
+    protected $hidden = [
         'id_deteccion',
         'id_alarma',
         'id_tipo_deteccion',
@@ -25,11 +25,16 @@ class DetectionEntity extends Model
         'fecha_hora_modificacion_deteccion'
     ];
 
-    protected $appends = ['id', 'type', 'image', 'created'];
+    protected $appends = ['id', 'alarmId', 'type', 'image', 'created'];
 
     public function getIdAttribute()
     {
         return $this->attributes['id_deteccion'];
+    }
+
+    public function getAlarmidAttribute()
+    {
+        return $this->attributes['id_alarma'];
     }
 
     public function getTypeAttribute()
@@ -56,5 +61,4 @@ class DetectionEntity extends Model
     {
         return $this->hasMany('App\Data\Entities\DetectionImageEntity', 'id_deteccion', 'id_deteccion');
     }
-
 }

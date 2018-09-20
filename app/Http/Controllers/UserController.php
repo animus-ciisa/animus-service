@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Data\Dao\UserDao;
+use App\Data\Dao\HomeDao;
 use App\Util\GeneratorUtil;
 use App\Data\Dao\HabitantDao;
 use Config;
@@ -63,7 +64,16 @@ class UserController extends Controller
         return response()->json($response, $response->code);
     }
 
-
+    public function myHome()
+    {
+        $response = ControllerResponses::badRequestResp();
+        if ($authUser = JWTAuth::parseToken()->authenticate()) {
+            $user = UserDao::getByImei($authUser->imei);
+            $homeData = HomeDao::allHomeData($user->habitant->idHogar);
+            $response = ControllerResponses::okResp($homeData);
+        }
+        return response()->json($response, $response->code);
+    }
 
     public function renew(Request $request)
     {
@@ -72,9 +82,6 @@ class UserController extends Controller
         $data = ControllerResponses::okResp(['token' => $newToken]);
         return response()->json($data, $data->code);
     }
-
-
-
 
     private function validateAuthenticateRequest($auth){
         $validate = \Validator::make($auth,[

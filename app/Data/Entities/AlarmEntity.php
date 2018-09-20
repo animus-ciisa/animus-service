@@ -17,7 +17,7 @@ class AlarmEntity extends Model
     const CREATED_AT    =   'fecha_hora_registro_alarma';
     const UPDATED_AT    =   'fecha_hora_modificacion_alarma';
 
-    protected $fillable =[
+    protected $fillable = [
         'id_hogar',
         'id_tipo_alarma',
         'id_persona',
@@ -142,5 +142,10 @@ class AlarmEntity extends Model
     public function habitant()
     {
         return $this->hasOne('App\Data\Entities\HabitantEntity', 'id_persona', 'id_persona');
+    }
+
+    public function detections()
+    {
+        return $this->hasMany('App\Data\Entities\DetectionEntity', 'id_alarma', 'id_alarma');
     }
 }
