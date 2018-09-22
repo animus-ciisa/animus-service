@@ -12,6 +12,7 @@ class DetectionEntity extends Model
 
     protected $fillable =[
         'id_alarma',
+        'id_hogar',
         'id_tipo_deteccion',
         'imagen_deteccion'
     ];
@@ -19,22 +20,28 @@ class DetectionEntity extends Model
     protected $hidden = [
         'id_deteccion',
         'id_alarma',
+        'id_hogar',
         'id_tipo_deteccion',
         'imagen_deteccion',
         'fecha_hora_registro_deteccion',
         'fecha_hora_modificacion_deteccion'
     ];
 
-    protected $appends = ['id', 'alarmId', 'type', 'image', 'created'];
+    protected $appends = ['id', 'alarmId', 'homeId', 'type', 'image', 'created'];
 
     public function getIdAttribute()
     {
         return $this->attributes['id_deteccion'];
     }
 
-    public function getAlarmidAttribute()
+    public function getAlarmIdAttribute()
     {
         return $this->attributes['id_alarma'];
+    }
+
+    public function getHomeIdAttribute()
+    {
+        return $this->attributes['id_hogar'];
     }
 
     public function getTypeAttribute()

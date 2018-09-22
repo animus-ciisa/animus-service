@@ -46,4 +46,13 @@ class CameraDao
         return true;
     }
 
+    public static function byHome($homeId, $date = null)
+    {
+        $query = CameraEntity::where('id_hogar', $homeId);
+        if($date != null){
+            $query->where('fecha_hora_modificacion_camara', '>=', date('Y-m-d H:i:s', strtotime($date)));
+        }
+        return $query->get();
+    }
+
 }

@@ -52,7 +52,6 @@ Route::group(['prefix' => '/api/alarms'], function() {
     Route::put('{idAlarma}','AlarmInTimeRangeController@update');
 });
 
-
 Route::resource('/api/emotion','EmotionController');
 Route::group(['prefix' => '/api/emotion'], function() {
     Route::post('by-home/{homeId}','EmotionController@byHomeHabitants');

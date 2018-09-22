@@ -1,13 +1,15 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Data\Dao\UserDao;
-use App\Data\Dao\HomeDao;
 use App\Util\GeneratorUtil;
-use App\Data\Dao\HabitantDao;
 use Config;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Data\Dao\UserDao;
+use App\Data\Dao\HomeDao;
+use App\Data\Dao\HabitantDao;
+use App\Data\Dao\AlarmDao;
+use App\Data\Dao\CameraDao;
 
 class UserController extends Controller
 {
@@ -64,13 +66,20 @@ class UserController extends Controller
         return response()->json($response, $response->code);
     }
 
-    public function myHome()
+    public function myHome(Request $request)
     {
         $response = ControllerResponses::badRequestResp();
         if ($authUser = JWTAuth::parseToken()->authenticate()) {
+            $date = null;
+            if($request->has('date')){
+                $date = $request->input('date');
+            }
             $user = UserDao::getByImei($authUser->imei);
-            $homeData = HomeDao::allHomeData($user->habitant->idHogar);
-            $response = ControllerResponses::okResp($homeData);
+            $habitants = HabitantDao::byHome($user->habitant->idHogar, $date);
+            $alarms = AlarmDao::byHome($user->habitant->idHogar, $date);
+            $detections = AlarmDao::detectionByHome($user->habitant->idHogar, $date);
+            $cameras = CameraDao::byHome($user->habitant->idHogar, $date);
+            $response = ControllerResponses::okResp(compact('habitants', 'alarms', 'detections', 'cameras'));
         }
         return response()->json($response, $response->code);
     }

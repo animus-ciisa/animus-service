@@ -102,7 +102,7 @@ class AlarmInTimeRangeController extends Controller
                 }
             }
             $image = $this->saveImage($request);
-            $detection = AlarmDao::saveDetection($alarmId, $request->input('type'), $image);
+            $detection = AlarmDao::saveDetection($alarmId, $authHome->id, $request->input('type'), $image);
 
             $this->notify2($this->getHomeFcmTokens($authHome->id), $detection, $alarm);
 

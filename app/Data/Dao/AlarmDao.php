@@ -62,7 +62,7 @@ class AlarmDao
         }
     }
 
-    public static function saveDetection($alarm, $type, $image, $id = null)
+    public static function saveDetection($alarm, $homeId, $type, $image, $id = null)
     {
         $detection = null;
         if($id != null){
@@ -74,6 +74,7 @@ class AlarmDao
             $detection = new DetectionEntity();
         }
         $detection->id_alarma = $alarm;
+        $detection->id_hogar = $homeId;
         $detection->id_tipo_deteccion = $type;
         $detection->imagen_deteccion = $image;
         if($detection->save()){
@@ -99,6 +100,24 @@ class AlarmDao
             return $detectionImage;
         }
         return null;
+    }
+
+    public static function byHome($homeId, $date = null)
+    {
+        $query = AlarmEntity::where('id_hogar', $homeId);
+        if($date != null){
+            $query->where('fecha_hora_modificacion_alarma', '>=', date('Y-m-d H:i:s', strtotime($date)));
+        }
+        return $query->get();
+    }
+
+    public static function detectionByHome($homeId, $date = null)
+    {
+        $query = DetectionEntity::where('id_hogar', $homeId);
+        if($date != null){
+            $query->where('fecha_hora_modificacion_deteccion', '>=', date('Y-m-d H:i:s', strtotime($date)));
+        }
+        return $query->get();
     }
 
     public static function getFullDetection($detectionId)

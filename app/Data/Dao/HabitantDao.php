@@ -51,9 +51,13 @@ class HabitantDao
         return false;
     }
 
-    public static function byHome($idHogar)
+    public static function byHome($idHogar, $date = null)
     {
-        return HabitantEntity::with('user')->where('id_hogar', $idHogar)->get();
+        $query = HabitantEntity::with('user')->where('id_hogar', $idHogar);
+        if($date != null){
+            $query->where('fecha_hora_modificacion_persona', '>=', date('Y-m-d H:i:s', strtotime($date)));
+        }
+        return $query->get();
     }
 
     public static function byHomeWithEmotion($idHogar)
